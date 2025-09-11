@@ -1,0 +1,34 @@
+# Virtual Peptide Synthesizer - Requirements
+# Core Python libraries for peptide synthesis automation
+
+# Data handling and validation
+pyyaml>=6.0
+dataclasses-json>=0.6.0
+
+# Scientific computing (optional, for advanced calculations)
+# numpy>=1.24.0
+# pandas>=2.0.0
+
+# Development and testing
+pytest>=7.0.0
+pytest-cov>=4.0.0
+
+# Code quality
+black>=23.0.0
+flake8>=6.0.0
+mypy>=1.5.0
+
+# Documentation (optional)
+# sphinx>=7.0.0
+# sphinx-rtd-theme>=1.3.0
+
+# Hardware communication (when ready for hardware integration)
+# pyserial>=3.5
+# modbus-tk>=1.1.0
+
+# Web interface (if building a web UI later)
+# flask>=2.3.0
+# flask-cors>=4.0.0
+
+# Note: This project primarily uses Python standard library
+# Most dependencies are optional based on specific features needed

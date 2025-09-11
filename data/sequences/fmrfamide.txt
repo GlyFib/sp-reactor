@@ -1,0 +1,6 @@
+# Example peptide sequence with terminal modifications
+FMRF-NH2
+
+# Comments start with #
+# This is the famous FMRFamide neuropeptide
+# Phe-Met-Arg-Phe with C-terminal amide

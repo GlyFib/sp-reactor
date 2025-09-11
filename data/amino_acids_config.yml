@@ -1,0 +1,217 @@
+# Enhanced Amino Acid Configuration
+# Supports custom protecting groups and non-canonical building blocks
+
+# Standard amino acids with default Fmoc protecting groups
+canonical_amino_acids:
+  A:
+    three_letter: Ala
+    full_name: Alanine
+    default_reagent: Fmoc-A
+  R:
+    three_letter: Arg
+    full_name: Arginine
+    default_reagent: Fmoc-R(Pbf)
+  N:
+    three_letter: Asn
+    full_name: Asparagine
+    default_reagent: Fmoc-N(Trt)
+  D:
+    three_letter: Asp
+    full_name: Aspartic acid
+    default_reagent: Fmoc-D(OtBu)
+  C:
+    three_letter: Cys
+    full_name: Cysteine
+    default_reagent: Fmoc-C(Trt)
+  E:
+    three_letter: Glu
+    full_name: Glutamic acid
+    default_reagent: Fmoc-E(OtBu)
+  Q:
+    three_letter: Gln
+    full_name: Glutamine
+    default_reagent: Fmoc-Q(Trt)
+  G:
+    three_letter: Gly
+    full_name: Glycine
+    default_reagent: Fmoc-G
+  H:
+    three_letter: His
+    full_name: Histidine
+    default_reagent: Fmoc-H(Trt)
+  I:
+    three_letter: Ile
+    full_name: Isoleucine
+    default_reagent: Fmoc-I
+  L:
+    three_letter: Leu
+    full_name: Leucine
+    default_reagent: Fmoc-L
+  K:
+    three_letter: Lys
+    full_name: Lysine
+    default_reagent: Fmoc-K(Boc)
+  M:
+    three_letter: Met
+    full_name: Methionine
+    default_reagent: Fmoc-M
+  F:
+    three_letter: Phe
+    full_name: Phenylalanine
+    default_reagent: Fmoc-F
+  P:
+    three_letter: Pro
+    full_name: Proline
+    default_reagent: Fmoc-P
+  S:
+    three_letter: Ser
+    full_name: Serine
+    default_reagent: Fmoc-S(tBu)
+  T:
+    three_letter: Thr
+    full_name: Threonine
+    default_reagent: Fmoc-T(tBu)
+  W:
+    three_letter: Trp
+    full_name: Tryptophan
+    default_reagent: Fmoc-W(Boc)
+  Y:
+    three_letter: Tyr
+    full_name: Tyrosine
+    default_reagent: Fmoc-Y(tBu)
+  V:
+    three_letter: Val
+    full_name: Valine
+    default_reagent: Fmoc-V
+
+# Custom protecting groups for canonical amino acids
+# Use * notation: K* = first custom protection, K** = second custom protection, etc.
+custom_protections:
+  K*:
+    base_amino_acid: K
+    protection_name: TFA
+    reagent: Fmoc-K(TFA)
+    description: Lysine with TFA protecting group
+  K**:
+    base_amino_acid: K
+    protection_name: Mtt
+    reagent: Fmoc-K(Mtt)
+    description: Lysine with Mtt protecting group
+  E*:
+    base_amino_acid: E
+    protection_name: All
+    reagent: Fmoc-E(All)
+    description: Glutamic acid with allyl protecting group
+  C*:
+    base_amino_acid: C
+    protection_name: Asm
+    reagent: Fmoc-C(Asm)
+    description: Cysteine with Asm protecting group
+  R*:
+    base_amino_acid: R
+    protection_name: Pmc
+    reagent: Fmoc-R(Pmc)
+    description: Arginine with Pmc protecting group
+  S*:
+    base_amino_acid: S
+    protection_name: Bzl
+    reagent: Fmoc-S(Bzl)
+    description: Serine with benzyl protecting group
+  T*:
+    base_amino_acid: T
+    protection_name: Bzl
+    reagent: Fmoc-T(Bzl)
+    description: Threonine with benzyl protecting group
+  Y*:
+    base_amino_acid: Y
+    protection_name: Bzl
+    reagent: Fmoc-Y(Bzl)
+    description: Tyrosine with benzyl protecting group
+
+# Non-canonical amino acids and building blocks
+# Use bracket notation: [NAME] or [CAS_NUMBER]
+building_blocks:
+  "[AEEA]":
+    full_name: 2-(2-Aminoethoxy)ethoxy acetic acid
+    reagent: AEEA
+    cas_number: "42617-41-4"
+    description: Amino-PEG2-acid spacer
+    molecular_weight: 163.17
+  "[Fmoc-AEEA]":
+    full_name: Fmoc-2-(2-Aminoethoxy)ethoxy acetic acid
+    reagent: Fmoc-AEEA
+    cas_number: "166108-71-0"
+    description: Fmoc-protected AEEA spacer
+    molecular_weight: 385.40
+  "[PEG4]":
+    full_name: 3,6,9,12-Tetraoxatetradecane-1,14-diamine
+    reagent: PEG4-diamine
+    cas_number: "86770-74-3"
+    description: PEG4 spacer/linker
+    molecular_weight: 248.32
+  "[Biotin]":
+    full_name: D-Biotin
+    reagent: Biotin
+    cas_number: "58-85-5"
+    description: Biotin for biotinylation
+    molecular_weight: 244.31
+  "[5-FAM]":
+    full_name: 5-Carboxyfluorescein
+    reagent: 5-FAM
+    cas_number: "76823-03-5"
+    description: Fluorescein label
+    molecular_weight: 376.32
+  "[TAMRA]":
+    full_name: 5-Carboxytetramethylrhodamine
+    reagent: 5-TAMRA
+    cas_number: "91809-66-4"
+    description: TAMRA fluorescent label
+    molecular_weight: 430.47
+
+# Special modifications and caps
+modifications:
+  n_terminal:
+    Ac: 
+      name: Acetyl
+      reagent: Acetic anhydride
+      description: N-terminal acetylation
+    Fmoc:
+      name: Fmoc
+      reagent: Fmoc-OSu
+      description: Fmoc protection
+    Boc:
+      name: Boc
+      reagent: Boc2O
+      description: Boc protection
+  c_terminal:
+    NH2:
+      name: Amide
+      reagent: Rink Amide resin
+      description: C-terminal amide
+    OH:
+      name: Free acid
+      reagent: Wang resin
+      description: Free carboxylic acid
+    OMe:
+      name: Methyl ester
+      reagent: "Methanol/DCC"
+      description: C-terminal methyl ester
+
+# Synthesis warnings and notes
+synthesis_notes:
+  difficult_sequences:
+    PP: "Proline-Proline dipeptide - difficult coupling"
+    GP: "Glycine-Proline - potential aggregation"
+    PG: "Proline-Glycine - potential aggregation"
+  
+  sensitive_residues:
+    M: "Methionine - oxidation sensitive, avoid harsh conditions"
+    W: "Tryptophan - UV sensitive, can racemize"
+    C: "Cysteine - oxidation sensitive, forms disulfide bonds"
+    H: "Histidine - can racemize under basic conditions"
+  
+  building_block_notes:
+    "[AEEA]": "PEG spacer - hydrophilic, flexible linker"
+    "[PEG4]": "Longer PEG spacer - increases solubility"
+    "[Biotin]": "Strong avidin binding - irreversible"
+    "[5-FAM]": "pH sensitive fluorescence"
