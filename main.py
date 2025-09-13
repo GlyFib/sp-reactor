@@ -154,9 +154,19 @@ Examples:
     )
     
     parser.add_argument(
+        '--host',
+        default='192.168.0.100',
+        help='Ethernet host for Arduino Opta (default: 192.168.0.100)'
+    )
+    parser.add_argument(
+        '--port',
+        type=int,
+        default=502,
+        help='Ethernet port for Arduino Opta (default: 502)'
+    )
+    parser.add_argument(
         '--serial-port',
-        default='COM3',
-        help='Serial port for Arduino Opta (e.g., COM3 or /dev/ttyUSB0)'
+        help='[DEPRECATED] Use --host and --port for ethernet communication'
     )
     parser.add_argument(
         '--ml-per-rev',
@@ -576,8 +586,23 @@ def run_hardware_mode(sequence_file: Path, args) -> int:
 
         # Set up Opta adapter
         from src.hardware.opta_adapter import OptaHardwareAdapter, OptaConfig
+        
+        # Handle backward compatibility with --serial-port (deprecated)
+        if args.serial_port:
+            print("⚠️  WARNING: --serial-port is deprecated. Use --host and --port for ethernet.")
+            # If serial_port looks like an IP, use it as host
+            if '.' in str(args.serial_port) and str(args.serial_port).replace('.', '').replace(':', '').isdigit():
+                host_to_use = str(args.serial_port).split(':')[0]  # Extract host if port is included
+                print(f"   Using {host_to_use} as ethernet host")
+            else:
+                print(f"   Using default ethernet host: {args.host}")
+                host_to_use = args.host
+        else:
+            host_to_use = args.host
+        
         opta_cfg = OptaConfig(
-            serial_port=str(args.serial_port),
+            host=host_to_use,
+            port=args.port,
             vici_id=str(args.vici_id),
             pump_id=str(args.pump_id),
             solenoid_relay_id=str(args.solenoid_relay_id),
@@ -585,7 +610,8 @@ def run_hardware_mode(sequence_file: Path, args) -> int:
         )
         adapter = OptaHardwareAdapter(opta_cfg)
         if not adapter.connect():
-            print("❌ Failed to connect to Arduino Opta. Check --serial-port and wiring.")
+            print(f"❌ Failed to connect to Arduino Opta at {host_to_use}:{args.port}")
+            print("   Check ethernet cable, Opta power, and network configuration.")
             return 1
 
         print("🔧 Connected to Opta. Beginning hardware execution...")

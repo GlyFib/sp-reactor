@@ -172,9 +172,9 @@ def execute_command_hardware(command: AtomicCommand, adapter: OptaHardwareAdapte
 
 
 def run_atomic_commands(csv_file: Path, hardware: bool = False, verbose: bool = False,
-                       serial_port: str = 'COM3', ml_per_rev: float = 0.8,
+                       host: str = '192.168.0.100', port: int = 502, ml_per_rev: float = 0.8,
                        vici_id: str = 'VICI_01', pump_id: str = 'MFLEX_01',
-                       solenoid_relay_id: str = 'REL_04') -> bool:
+                       solenoid_relay_id: str = 'REL_04', serial_port: Optional[str] = None) -> bool:
     """Execute all atomic commands from CSV file."""
     print(f"📄 Loading atomic commands from: {csv_file}")
     
@@ -190,8 +190,23 @@ def run_atomic_commands(csv_file: Path, hardware: bool = False, verbose: bool = 
     adapter = None
     if hardware:
         print("🔌 Connecting to Arduino Opta...")
+        
+        # Handle backward compatibility with --serial-port (deprecated)
+        if serial_port:
+            print("⚠️  WARNING: --serial-port is deprecated. Use --host and --port for ethernet.")
+            # If serial_port looks like an IP, use it as host
+            if '.' in str(serial_port) and str(serial_port).replace('.', '').replace(':', '').isdigit():
+                host_to_use = str(serial_port).split(':')[0]  # Extract host if port is included
+                print(f"   Using {host_to_use} as ethernet host")
+            else:
+                print(f"   Using default ethernet host: {host}")
+                host_to_use = host
+        else:
+            host_to_use = host
+        
         opta_cfg = OptaConfig(
-            serial_port=serial_port,
+            host=host_to_use,
+            port=port,
             vici_id=vici_id,
             pump_id=pump_id,
             solenoid_relay_id=solenoid_relay_id,
@@ -255,8 +270,8 @@ def create_parser() -> argparse.ArgumentParser:
         epilog="""
 Examples:
   %(prog)s atomic_commands.csv                    # Simulate execution
-  %(prog)s atomic_commands.csv --hardware         # Execute on hardware
-  %(prog)s atomic_commands.csv --hardware --serial-port /dev/ttyUSB0  # Linux
+  %(prog)s atomic_commands.csv --hardware         # Execute on hardware (ethernet)
+  %(prog)s atomic_commands.csv --hardware --host 192.168.1.100 --port 502  # Custom ethernet
         """
     )
     
@@ -273,9 +288,21 @@ Examples:
     )
     
     parser.add_argument(
+        '--host',
+        default='192.168.0.100',
+        help='Ethernet host for Arduino Opta (default: 192.168.0.100)'
+    )
+    
+    parser.add_argument(
+        '--port',
+        type=int,
+        default=502,
+        help='Ethernet port for Arduino Opta (default: 502)'
+    )
+    
+    parser.add_argument(
         '--serial-port',
-        default='COM3',
-        help='Serial port for Arduino Opta (e.g., COM3 or /dev/ttyUSB0)'
+        help='[DEPRECATED] Use --host and --port for ethernet communication'
     )
     
     parser.add_argument(
@@ -330,6 +357,8 @@ def main() -> int:
             csv_file=args.csv_file,
             hardware=args.hardware,
             verbose=args.verbose,
+            host=args.host,
+            port=args.port,
             serial_port=args.serial_port,
             ml_per_rev=args.ml_per_rev,
             vici_id=args.vici_id,
